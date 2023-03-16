@@ -51,6 +51,7 @@ def video_processing():
     video.release()
     out.release()
     t2 = time.time()
+    print("--- VID PROC ---")
     print("Handler time = ", t2-t1)
     print("Idle time = ", t4-t3+t6-t5)
     return

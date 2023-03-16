@@ -43,6 +43,7 @@ def lambda_handler():
         # print('With prob = %.5f, it contains %s' % (prob[0,i].asscalar(), labels[i]))
         inference = inference + 'With prob = %.5f, it contains %s' % (prob[0,i].asscalar(), labels[i]) + '. '
     t2 = time.time()
+    print("--- CNN SERVING ---")
     print("Handler time = ", t2-t1)
     print("Idle time = ", t4-t3)
     return inference

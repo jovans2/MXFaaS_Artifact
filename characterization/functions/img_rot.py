@@ -26,6 +26,7 @@ def main(params):
     blob_client.upload_blob(value, overwrite=True)
     t6 = time.time()
     t2 = time.time()
+    print("--- IMG ROT ---")
     print("Handler time = ", t2-t1)
     print("Idle time = ", t4-t3+t6-t5)
     return {"Image":"rotated"}

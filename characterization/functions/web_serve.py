@@ -29,8 +29,9 @@ def main(params):
     blob_client.upload_blob(value, overwrite=True)
     t6 = time.time()
     t2 = time.time()
-    print(t2-t1)
-    print(t4+t6-t3-t5)
+    print("--- WEB SERVE ---")
+    print("Handler time = ", t2-t1)
+    print("Idle time = ", t4+t6-t3-t5)
     return {"Money":"withdrawn"}
 
 main({"test":"func"})
