@@ -28,18 +28,10 @@ for line in azureFile:
         funcPerApps[listLines[0]] = set()
     funcPerApps[listLines[0]].add(listLines[1])
 
-print(index)
-print(len(apps))
-print(index / len(apps))
-
 numbers = []
 targetFunc = ""
 for key in funcPerApps:
     numbers.append(len(funcPerApps[key]))
-
-print(min(numbers))
-print(max(numbers))
-print(statistics.mean(numbers))
 
 apps_per_minute = {}
 for line in lineFile:
@@ -99,10 +91,6 @@ y = np.arange(len(calls_per_minute)) / float(len(calls_per_minute))
 
 plt.xlabel('Number of concurrent invocations of the same function', fontsize=18)
 plt.ylabel('CDF', fontsize=18)
-
-print("--- Azure ---")
-print(x)
-print(y)
   
 plt.plot(x, y, label="Azure", color="black", linewidth=3)
 
