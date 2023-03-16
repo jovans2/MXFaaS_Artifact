@@ -5,6 +5,9 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
 import pandas as pd
 import re
+import warnings
+
+warnings.filterwarnings("ignore")
 
 cleanup_re = re.compile('[^a-z]+')
 
