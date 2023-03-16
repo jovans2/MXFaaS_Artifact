@@ -5,6 +5,8 @@ connection_string = "DefaultEndpointsProtocol=https;AccountName=serverlesscache;
 blob_service_client = BlobServiceClient.from_connection_string(connection_string)
 container_client = blob_service_client.get_container_client("artifacteval")
 
+fileAppend = open("../funcs.txt", "a")
+
 def main(params):
     t1 = time.time()
     blobName = "money.txt"
@@ -29,9 +31,9 @@ def main(params):
     blob_client.upload_blob(value, overwrite=True)
     t6 = time.time()
     t2 = time.time()
-    print("--- WEB SERVE ---")
-    print("Handler time = ", t2-t1)
-    print("Idle time = ", t4+t6-t3-t5)
+    print("--- WEB SERVE ---", file=fileAppend)
+    print("Handler time = ", t2-t1, file=fileAppend)
+    print("Idle time = ", t4+t6-t3-t5, file=fileAppend)
     return {"Money":"withdrawn"}
 
 main({"test":"func"})

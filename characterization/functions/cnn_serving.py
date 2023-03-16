@@ -14,6 +14,8 @@ lblPath = gluon.utils.download('http://data.mxnet.io/models/imagenet/synset.txt'
 with open(lblPath, 'r') as f:
     labels = [l.rstrip() for l in f]
 
+fileAppend = open("../funcs.txt", "a")
+
 def lambda_handler():
     t1 = time.time()
     blobName = "img10.jpg"
@@ -43,9 +45,9 @@ def lambda_handler():
         # print('With prob = %.5f, it contains %s' % (prob[0,i].asscalar(), labels[i]))
         inference = inference + 'With prob = %.5f, it contains %s' % (prob[0,i].asscalar(), labels[i]) + '. '
     t2 = time.time()
-    print("--- CNN SERVING ---")
-    print("Handler time = ", t2-t1)
-    print("Idle time = ", t4-t3)
+    print("--- CNN SERVING ---", file=fileAppend)
+    print("Handler time = ", t2-t1, file=fileAppend)
+    print("Idle time = ", t4-t3, file=fileAppend)
     return inference
 
 lambda_handler()

@@ -6,6 +6,8 @@ connection_string = "DefaultEndpointsProtocol=https;AccountName=serverlesscache;
 blob_service_client = BlobServiceClient.from_connection_string(connection_string)
 container_client = blob_service_client.get_container_client("artifacteval")
 
+fileAppend = open("../funcs.txt", "a")
+
 def main(params):
     t1 = time.time()
     blobName = "img10.jpg"
@@ -26,9 +28,9 @@ def main(params):
     blob_client.upload_blob(value, overwrite=True)
     t6 = time.time()
     t2 = time.time()
-    print("--- IMG ROT ---")
-    print("Handler time = ", t2-t1)
-    print("Idle time = ", t4-t3+t6-t5)
+    print("--- IMG ROT ---", file=fileAppend)
+    print("Handler time = ", t2-t1, file=fileAppend)
+    print("Idle time = ", t4-t3+t6-t5, file=fileAppend)
     return {"Image":"rotated"}
 
 main({"test":"func"})

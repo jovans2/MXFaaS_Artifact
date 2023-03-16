@@ -12,6 +12,8 @@ vid_name = 'vid1.mp4'
 
 result_file_path = tmp + vid_name
 
+fileAppend = open("../funcs.txt", "a")
+
 def video_processing():
     t1 = time.time()
     blobName = "vid1.mp4"
@@ -51,9 +53,9 @@ def video_processing():
     video.release()
     out.release()
     t2 = time.time()
-    print("--- VID PROC ---")
-    print("Handler time = ", t2-t1)
-    print("Idle time = ", t4-t3+t6-t5)
+    print("--- VID PROC ---", file=fileAppend)
+    print("Handler time = ", t2-t1, file=fileAppend)
+    print("Idle time = ", t4-t3+t6-t5, file=fileAppend)
     return
 
 def serve():

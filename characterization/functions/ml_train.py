@@ -22,6 +22,7 @@ def cleanup(sentence):
 
 df_name = 'minioDataset.csv'
 df_path = 'pulled_' + df_name
+fileAppend = open("../funcs.txt", "a")
 
 def serve():
     t1 = time.time()
@@ -53,9 +54,9 @@ def serve():
     t6 = time.time()
 
     t2 = time.time()
-    print("--- ML TRAIN ---")
-    print("Handler time = ", t2-t1)
-    print("Idle time = ", t4-t3+t6-t5)
+    print("--- ML TRAIN ---", file=fileAppend)
+    print("Handler time = ", t2-t1, file=fileAppend)
+    print("Idle time = ", t4-t3+t6-t5, file=fileAppend)
     return {"Ok":"done"}
 
 if __name__ == '__main__':
