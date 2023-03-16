@@ -33,7 +33,7 @@ def serve():
     df = pd.read_csv(df_path)
     df['train'] = df['Text'].apply(cleanup)
 
-    model = LogisticRegression()
+    model = LogisticRegression(max_iter=10)
     tfidf_vector = TfidfVectorizer(min_df=1000).fit(df['train'])
     train = tfidf_vector.transform(df['train'])
     model.fit(train, df['Score'])
