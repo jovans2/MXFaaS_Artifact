@@ -10,7 +10,7 @@ python3 ml_train.py
 python3 vid_proc.py
 python3 web_serve.py
 
-cd functions-mem-footprint
+cd ../functions-mem-footprint
 
 python3 cnn_serving.py
 python3 img_res.py
