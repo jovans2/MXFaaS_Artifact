@@ -1,14 +1,14 @@
 apiVersion: serving.knative.dev/v1
 kind: Service
 metadata:
-  name: img-res
+  name: ml-train
   namespace: default
 spec:
   template:
     spec:
       containerConcurrency: 1000
       containers:
-        - image: jovanvr97/img_res_knative:latest
+        - image: jovanvr97/ml_train_knative:latest
           resources:
             requests:
               cpu: 12000m

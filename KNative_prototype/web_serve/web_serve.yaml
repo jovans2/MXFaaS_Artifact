@@ -9,6 +9,12 @@ spec:
       containerConcurrency: 1000
       containers:
         - image: jovanvr97/web_serve_knative:latest
+          resources:
+            requests:
+              cpu: 12000m
+              memory: 640M
+            limits:
+              cpu: 16
     metadata:
       annotations:
         autoscaling.knative.dev/target: "1000"
