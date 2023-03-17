@@ -14,7 +14,7 @@ spec:
               cpu: 1000m
               memory: 640M
             limits:
-              cpu: 16
+              cpu: 2
     metadata:
       annotations:
         autoscaling.knative.dev/target: "1000"
