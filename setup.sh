@@ -37,7 +37,7 @@ sudo mv kn-quickstart-linux-amd64 /usr/local/bin/kn-quickstart
 
 sudo chmod 666 /var/run/docker.sock
 
-minikube start --nodes 3 -p minikube
+minikube start --nodes 1 -p minikube
 
 # Install the required custom resources by running the command:
 kubectl apply -f https://github.com/knative/serving/releases/download/knative-v1.9.1/serving-crds.yaml
