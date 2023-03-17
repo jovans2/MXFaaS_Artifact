@@ -94,7 +94,7 @@ mapPIDtoStatus = {} # map from pid to status (running, waiting)
 
 responseMapWindows = [] # map from pid to response
 
-affinity_mask = {0,1,2,3,4,5,6,7}
+affinity_mask = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15}
 
 
 # The function to update the core nums by request. 
@@ -362,8 +362,10 @@ def run():
     global responseMapWindows
     global affinity_mask
     # Set the core of mxcontainer
-    numCores = 8
+    numCores = 16
     os.sched_setaffinity(0, affinity_mask)
+
+    print("Welcome... ", numCores)
 
     # Set the address and port, the port can be acquired from environment variable
     myHost = '0.0.0.0'

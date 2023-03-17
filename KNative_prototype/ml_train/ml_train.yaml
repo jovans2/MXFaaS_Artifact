@@ -8,7 +8,7 @@ spec:
     spec:
       containerConcurrency: 1000
       containers:
-        - image: jovanvr97/ml_train_knative
+        - image: jovanvr97/ml_train_knative:latest
     metadata:
       annotations:
         autoscaling.knative.dev/target: "1000"

@@ -56,3 +56,7 @@ kubectl patch configmap/config-network \
 
 # Configure DNS
 kubectl apply -f https://github.com/knative/serving/releases/download/knative-v1.9.1/serving-default-domain.yaml
+
+
+sudo apt-get install python3-pip
+pip3 install numpy

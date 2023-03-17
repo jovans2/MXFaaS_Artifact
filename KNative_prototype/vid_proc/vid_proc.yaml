@@ -8,7 +8,7 @@ spec:
     spec:
       containerConcurrency: 1000
       containers:
-        - image: jovanvr97/vid_proc_knative
+        - image: jovanvr97/vid_proc_knative:latest
     metadata:
       annotations:
         autoscaling.knative.dev/target: "1000"
