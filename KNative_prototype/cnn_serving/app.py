@@ -3,6 +3,7 @@ from mxnet import gluon
 import mxnet as mx
 from PIL import Image
 from azure.storage.blob import BlobServiceClient, BlobClient
+import dnld_blob
 
 connection_string = "DefaultEndpointsProtocol=https;AccountName=serverlesscache;AccountKey=O7MZkxwjyBWTcPL4fDoHi6n8GsYECQYiMe+KLOIPLpzs9BoMONPg2thf1wM1pxlVxuICJvqL4hWb+AStIKVWow==;EndpointSuffix=core.windows.net"
 blob_service_client = BlobServiceClient.from_connection_string(connection_string)
@@ -22,7 +23,7 @@ def lambda_handler():
     blob_client = BlobClient.from_connection_string(connection_string, container_name="artifacteval", blob_name=blobName)
     with open(blobName, "wb") as my_blob:
         t3 = time.time()
-        download_stream = blob_client.download_blob()
+        download_stream = dnld_blob.download_blob_new(blob_client)
         t4 = time.time()
         my_blob.write(download_stream.readall())
     image = Image.open(blobName)
@@ -48,6 +49,4 @@ def lambda_handler():
     print("--- CNN SERVING ---", file=fileAppend)
     print("Handler time = ", t2-t1, file=fileAppend)
     print("Idle time = ", t4-t3, file=fileAppend)
-    return inference
-
-lambda_handler()
+    return {"result = ":inference}

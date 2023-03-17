@@ -1,0 +1,15 @@
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: img_res
+  namespace: default
+spec:
+  template:
+    spec:
+      containerConcurrency: 10000
+      containers:
+        - image: jovanvr97/img_res_knative
+    metadata:
+      annotations:
+        autoscaling.knative.dev/target: "1000"
+        autoscaling.knative.dev/scale-to-zero-pod-retention-period: "1h"

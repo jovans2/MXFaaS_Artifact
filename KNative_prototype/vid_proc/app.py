@@ -1,6 +1,7 @@
 import time
 import cv2
 from azure.storage.blob import BlobServiceClient, BlobClient
+import dnld_blob
 
 connection_string = "DefaultEndpointsProtocol=https;AccountName=serverlesscache;AccountKey=O7MZkxwjyBWTcPL4fDoHi6n8GsYECQYiMe+KLOIPLpzs9BoMONPg2thf1wM1pxlVxuICJvqL4hWb+AStIKVWow==;EndpointSuffix=core.windows.net"
 blob_service_client = BlobServiceClient.from_connection_string(connection_string)
@@ -14,13 +15,13 @@ result_file_path = tmp + vid_name
 
 fileAppend = open("../funcs.txt", "a")
 
-def video_processing():
+def lambda_handler():
     t1 = time.time()
     blobName = "vid1.mp4"
     blob_client = BlobClient.from_connection_string(connection_string, container_name="artifacteval", blob_name=blobName)
     with open(vid_name, "wb") as my_blob:
         t3 = time.time()
-        download_stream = blob_client.download_blob()
+        download_stream = dnld_blob.download_blob_new(blob_client)
         t4 = time.time()
         my_blob.write(download_stream.readall())
     video = cv2.VideoCapture(vid_name)
@@ -47,7 +48,7 @@ def video_processing():
     blobName = "output.avi"
     t5 = time.time()
     blob_client = BlobClient.from_connection_string(connection_string, container_name="artifacteval", blob_name=blobName)
-    blob_client.upload_blob(value, overwrite=True)
+    dnld_blob.upload_blob_new(blob_client, value)
     t6 = time.time()
 
     video.release()
@@ -56,10 +57,4 @@ def video_processing():
     print("--- VID PROC ---", file=fileAppend)
     print("Handler time = ", t2-t1, file=fileAppend)
     print("Idle time = ", t4-t3+t6-t5, file=fileAppend)
-    return
-
-def serve():
-    video_processing()
-
-if __name__ == '__main__':
-    serve()
+    return {"Video": "Done"}
