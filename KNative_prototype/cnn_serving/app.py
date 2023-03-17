@@ -1,5 +1,5 @@
-import time
 from mxnet import gluon
+import os
 import mxnet as mx
 from PIL import Image
 from azure.storage.blob import BlobServiceClient, BlobClient
@@ -15,22 +15,16 @@ lblPath = gluon.utils.download('http://data.mxnet.io/models/imagenet/synset.txt'
 with open(lblPath, 'r') as f:
     labels = [l.rstrip() for l in f]
 
-fileAppend = open("../funcs.txt", "a")
-
 def lambda_handler():
-    t1 = time.time()
     blobName = "img10.jpg"
-    blob_client = BlobClient.from_connection_string(connection_string, container_name="artifacteval", blob_name=blobName)
-    with open(blobName, "wb") as my_blob:
-        t3 = time.time()
-        download_stream = dnld_blob.download_blob_new(blob_client)
-        t4 = time.time()
-        my_blob.write(download_stream.readall())
-    image = Image.open(blobName)
-    image.save('tempImage.jpeg')
+    dnld_blob.download_blob_new(blobName)
+    full_blob_name = blobName.split(".")
+    proc_blob_name = full_blob_name[0] + "_" + str(os.getpid()) + full_blob_name[1]
+    image = Image.open(proc_blob_name)
+    image.save('tempImage_'+str(os.getpid())+'.jpeg')
 
     # format image as (batch, RGB, width, height)
-    img = mx.image.imread("tempImage.jpeg")
+    img = mx.image.imread('tempImage_'+str(os.getpid())+'.jpeg')
     img = mx.image.imresize(img, 224, 224) # resize
     img = mx.image.color_normalize(img.astype(dtype='float32')/255,
                                 mean=mx.nd.array([0.485, 0.456, 0.406]),
@@ -45,8 +39,5 @@ def lambda_handler():
         i = int(i.asscalar())
         # print('With prob = %.5f, it contains %s' % (prob[0,i].asscalar(), labels[i]))
         inference = inference + 'With prob = %.5f, it contains %s' % (prob[0,i].asscalar(), labels[i]) + '. '
-    t2 = time.time()
-    print("--- CNN SERVING ---", file=fileAppend)
-    print("Handler time = ", t2-t1, file=fileAppend)
-    print("Idle time = ", t4-t3, file=fileAppend)
+
     return {"result = ":inference}

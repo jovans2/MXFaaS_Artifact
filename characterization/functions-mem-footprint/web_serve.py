@@ -7,7 +7,7 @@ from azure.storage.blob import BlobServiceClient, BlobClient
 
 fileAppend = open("../funcs.txt", "a")
 
-memoryUse = python_process.memory_info()[0]/2.**30  # memory use in GB
+memoryUse = python_process.memory_info()[0]/2.**20  # memory use in MB
 print("--- WEB SERVE ---", file=fileAppend)
 print('memory use 1:', memoryUse-memoryUse_old, file=fileAppend)
 
@@ -16,7 +16,7 @@ blob_service_client = BlobServiceClient.from_connection_string(connection_string
 container_client = blob_service_client.get_container_client("artifacteval")
 
 memoryUse_old = memoryUse
-memoryUse = python_process.memory_info()[0]/2.**30  # memory use in GB
+memoryUse = python_process.memory_info()[0]/2.**20  # memory use in MB
 print('memory use 2:', memoryUse-memoryUse_old, file=fileAppend)
 
 def main(params):
@@ -41,5 +41,5 @@ def main(params):
 
 main({"test":"func"})
 memoryUse_old = memoryUse
-memoryUse = python_process.memory_info()[0]/2.**30  # memory use in GB
+memoryUse = python_process.memory_info()[0]/2.**20  # memory use in MB
 print('memory use 3:', memoryUse-memoryUse_old, file=fileAppend)

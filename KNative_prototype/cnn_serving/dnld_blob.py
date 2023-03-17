@@ -1,19 +1,30 @@
 import socket
 import os
+import json
+import base64
+import time
 
-def download_blob_new(blb_cl):
+def download_blob_new(blobName):
     myHost = '0.0.0.0'
     myPort = 3333
     clientSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     clientSocket.connect((myHost, myPort))
-    clientSocket.sendall(("blocked - " + str(os.getpid())).encode(encoding="utf-8"))
-    clientSocket.close()
+    message = {"blobName": blobName, "operation": "get", "pid": os.getpid()}
+    messageStr = json.dumps(message)
+    clientSocket.sendall(messageStr.encode(encoding="utf-8"))
 
-    blb_to_ret = blb_cl.download_blob()
+    data_ = b''
+    data_ += clientSocket.recv(1024)
+    dataStr = data_.decode('UTF-8')
 
-    clientSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    clientSocket.connect((myHost, myPort))
-    clientSocket.sendall(("unblocked - " + str(os.getpid())).encode(encoding="utf-8"))
-    clientSocket.close()
+    while True:
+        dataStrList = dataStr.splitlines()
+        message = None   
+        try:
+            message = json.loads(dataStrList[-1])
+            break
+        except:
+            data_ += clientSocket.recv(1024)
+            dataStr = data_.decode('UTF-8')
 
-    return blb_to_ret
+    return message

@@ -8,7 +8,7 @@ from azure.storage.blob import BlobServiceClient, BlobClient
 
 fileAppend = open("../funcs.txt", "a")
 
-memoryUse = python_process.memory_info()[0]/2.**30  # memory use in GB
+memoryUse = python_process.memory_info()[0]/2.**20  # memory use in MB
 print("--- VID PROC ---", file=fileAppend)
 print('memory use 1:', memoryUse-memoryUse_old, file=fileAppend)
 
@@ -29,7 +29,7 @@ with open(vid_name, "wb") as my_blob:
 result_file_path = tmp + vid_name
 
 memoryUse_old = memoryUse
-memoryUse = python_process.memory_info()[0]/2.**30  # memory use in GB
+memoryUse = python_process.memory_info()[0]/2.**20  # memory use in MB
 print('memory use 2:', memoryUse-memoryUse_old, file=fileAppend)
 
 def video_processing():
@@ -69,5 +69,5 @@ def serve():
 if __name__ == '__main__':
     serve()
     memoryUse_old = memoryUse
-    memoryUse = python_process.memory_info()[0]/2.**30  # memory use in GB
+    memoryUse = python_process.memory_info()[0]/2.**20  # memory use in MB
     print('memory use 3:', memoryUse-memoryUse_old, file=fileAppend)

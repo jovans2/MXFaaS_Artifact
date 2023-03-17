@@ -10,7 +10,7 @@ from azure.storage.blob import BlobServiceClient, BlobClient
 
 fileAppend = open("../funcs.txt", "a")
 
-memoryUse = python_process.memory_info()[0]/2.**30  # memory use in GB
+memoryUse = python_process.memory_info()[0]/2.**20  # memory use in MB
 print("--- CNN SERVING ---", file=fileAppend)
 print('memory use 1:', memoryUse-memoryUse_old, file=fileAppend)
 
@@ -25,7 +25,7 @@ with open(lblPath, 'r') as f:
     labels = [l.rstrip() for l in f]
 
 memoryUse_old = memoryUse
-memoryUse = python_process.memory_info()[0]/2.**30  # memory use in GB
+memoryUse = python_process.memory_info()[0]/2.**20  # memory use in MB
 print('memory use 2:', memoryUse-memoryUse_old, file=fileAppend)
 
 def lambda_handler():
@@ -57,5 +57,5 @@ def lambda_handler():
 
 lambda_handler()
 memoryUse_old = memoryUse
-memoryUse = python_process.memory_info()[0]/2.**30  # memory use in GB
+memoryUse = python_process.memory_info()[0]/2.**20  # memory use in MB
 print('memory use 3:', memoryUse-memoryUse_old, file=fileAppend)
