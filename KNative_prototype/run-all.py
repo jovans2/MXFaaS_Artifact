@@ -91,7 +91,7 @@ for load in loads:
         for thread in threads:
             thread.join()
 
-        print("=====================================", file=output_file, flush=True)
+        print("=====================" + serviceNames[services.index(service)] + "=====================", file=output_file, flush=True)
         print(mean(times), file=output_file, flush=True)
         print(median(times), file=output_file, flush=True)
         print(np.percentile(times, 90), file=output_file, flush=True)

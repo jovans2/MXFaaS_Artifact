@@ -7,9 +7,6 @@ kubectl apply -f img_res.yaml
 cd ../img_rot
 kubectl apply -f img_rot.yaml
 
-cd ../ml_train
-kubectl apply -f ml_train.yaml
-
 cd ../vid_proc
 kubectl apply -f vid_proc.yaml
 
