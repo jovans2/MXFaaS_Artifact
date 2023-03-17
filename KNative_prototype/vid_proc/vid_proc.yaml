@@ -1,7 +1,7 @@
 apiVersion: serving.knative.dev/v1
 kind: Service
 metadata:
-  name: vid_proc
+  name: vid-proc
   namespace: default
 spec:
   template:

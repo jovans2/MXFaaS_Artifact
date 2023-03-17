@@ -1,7 +1,7 @@
 apiVersion: serving.knative.dev/v1
 kind: Service
 metadata:
-  name: img_res
+  name: img-res
   namespace: default
 spec:
   template:

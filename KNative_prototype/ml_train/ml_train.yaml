@@ -1,7 +1,7 @@
 apiVersion: serving.knative.dev/v1
 kind: Service
 metadata:
-  name: ml_train
+  name: ml-train
   namespace: default
 spec:
   template:
