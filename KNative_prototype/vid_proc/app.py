@@ -35,10 +35,9 @@ def lambda_handler():
         else:
             break
 
-    fRead = open('output_'+str(os.getpid())+'.avi',"rb")
-    value = fRead.read()
+    fReadname = 'output_'+str(os.getpid())+'.avi'
     blobName = "output.avi"
-    dnld_blob.upload_blob_new(blobName, value)
+    dnld_blob.upload_blob_new(blobName, fReadname)
 
     video.release()
     out.release()

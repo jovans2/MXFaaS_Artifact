@@ -19,7 +19,7 @@ def lambda_handler():
     blobName = "img10.jpg"
     dnld_blob.download_blob_new(blobName)
     full_blob_name = blobName.split(".")
-    proc_blob_name = full_blob_name[0] + "_" + str(os.getpid()) + full_blob_name[1]
+    proc_blob_name = full_blob_name[0] + "_" + str(os.getpid()) + "." + full_blob_name[1]
     image = Image.open(proc_blob_name)
     image.save('tempImage_'+str(os.getpid())+'.jpeg')
 

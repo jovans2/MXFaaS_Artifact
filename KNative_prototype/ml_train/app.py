@@ -22,14 +22,13 @@ def cleanup(sentence):
     return sentence
 
 df_name = 'minioDataset.csv'
-df_path = 'pulled_' + df_name
 
 def lambda_handler():
 
     blobName = df_name
     dnld_blob.download_blob_new(blobName)
-    full_blob_name = df_path.split(".")
-    proc_blob_name = full_blob_name[0] + "_" + str(os.getpid()) + full_blob_name[1]
+    full_blob_name = df_name.split(".")
+    proc_blob_name = full_blob_name[0] + "_" + str(os.getpid()) + "." + full_blob_name[1]
 
     df = pd.read_csv(proc_blob_name)
     df['train'] = df['Text'].apply(cleanup)
@@ -42,9 +41,8 @@ def lambda_handler():
     filename = 'finalized_model_'+str(os.getpid())+'.sav'
     pickle.dump(model, open(filename, 'wb'))
 
-    fRead = open('finalized_model_'+str(os.getpid())+'.sav',"rb")
-    value = fRead.read()
+    fReadName = 'finalized_model_'+str(os.getpid())+'.sav'
     blobName = "finalized_model.sav"
-    dnld_blob.upload_blob_new(blobName, value)
+    dnld_blob.upload_blob_new(blobName, fReadName)
 
     return {"Ok":"done"}

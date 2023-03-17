@@ -4,17 +4,14 @@ import sys
 import signal
 import threading
 import socket
-import logging
-import psutil
 import numpy as np
 import time
-import re
+import signal
 from azure.storage.blob import BlobServiceClient, BlobClient
 
 connection_string = "DefaultEndpointsProtocol=https;AccountName=serverlesscache;AccountKey=O7MZkxwjyBWTcPL4fDoHi6n8GsYECQYiMe+KLOIPLpzs9BoMONPg2thf1wM1pxlVxuICJvqL4hWb+AStIKVWow==;EndpointSuffix=core.windows.net"
 blob_service_client = BlobServiceClient.from_connection_string(connection_string)
 container_client = blob_service_client.get_container_client("artifacteval")
-
 
 def signal_handler(sig, frame):
     serverSocket_.close()
@@ -85,11 +82,13 @@ serverSocket_ = None # serverSocket
 actionModule = None # action module
 
 checkTable = {}
+mapPIDtoLeader = {}
 checkTableShadow = {}
 valueTable = {}
 mapPIDtoIO = {}
 lockCache = threading.Lock()
 
+lockPIDMap = threading.Lock()
 requestQueue = [] # queue of child processes
 mapPIDtoStatus = {} # map from pid to status (running, waiting)
 
@@ -124,7 +123,6 @@ def updateThread():
         
         # Get the numCores and update the global variable
         numCores = message["numCores"]
-        logging.debug("Update core num to {}".format(numCores))
         result = {"Response": "Ok"}
         msg = json.dumps(result)
 
@@ -207,53 +205,22 @@ def waitTermination(childPid):
         if responseTime[0] == childPid:
             responseTime[1][1] = time.time()
             break
+    lockPIDMap.acquire()
     requestQueue.remove(childPid)
-    mapPIDtoStatus.pop(childPid)
+    try:
+        mapPIDtoStatus.pop(childPid)
+    except:
+        pass
     for index in range(len(requestQueue)):
         # Find the first waiting child process and run it.
         if(mapPIDtoStatus[requestQueue[index]] == "waiting"):
             mapPIDtoStatus[requestQueue[index]] = "running"
-            psutil.Process(requestQueue[index]).resume()
-            # logging.debug("Resume process for pid %d", requestQueue[index])
-            break
-
-def threadChangeStatus(clientSocket_):
-    global mapPIDtoStatus
-    global numCores
-    while True:
-        try:
-            data_ = clientSocket_.recv(1024)
-            if not data_:
+            try:
+                os.kill(requestQueue[index], signal.SIGCONT)
                 break
-            dataStr = data_.decode('UTF-8')
-            dataStrLines = dataStr.splitlines()
-            for line in dataStrLines:
-                if "unblocked" in line:
-                    string1 = line.split(" - ")[-1]
-                    unblockedID = int(re.search(r'\d+', string1).group()) # get PID
-                    numRunning = 0 # number of running processes
-                    for child in mapPIDtoStatus.copy():
-                        if mapPIDtoStatus[child] == "running":
-                            numRunning += 1
-                    if numRunning < numCores:
-                        mapPIDtoStatus[unblockedID] = "running"
-                    else:
-                        mapPIDtoStatus[unblockedID] = "waiting"
-                        psutil.Process(unblockedID).suspend()
-                    result = "ok"
-                    clientSocket_.send(result.encode(encoding="utf-8"))
-                    break
-                elif "blocked" in line:
-                    string1 = line.split(" - ")[-1]
-                    blockedID = int(re.search(r'\d+', string1).group())
-                    mapPIDtoStatus[blockedID] = "blocked"
-                    for child in mapPIDtoStatus.copy():
-                        if mapPIDtoStatus[child] == "waiting":
-                            mapPIDtoStatus[child] = "running"
-                            psutil.Process(requestQueue[child]).resume()
-                            break
-        except:
-            break
+            except:
+                pass
+    lockPIDMap.release()
 
 def performIO(clientSocket_):
     global mapPIDtoStatus
@@ -262,6 +229,7 @@ def performIO(clientSocket_):
     global mapPIDtoIO
     global valueTable
     global checkTableShadow
+    global mapPIDtoLeader
 
     data_ = b''
     data_ += clientSocket_.recv(1024)
@@ -282,78 +250,91 @@ def performIO(clientSocket_):
     blobName = message["blobName"]
     blockedID = message["pid"]
 
+    my_id = threading.get_native_id()
+
     blob_client = BlobClient.from_connection_string(connection_string, container_name="artifacteval", blob_name=blobName)
 
+    lockPIDMap.acquire()
     mapPIDtoStatus[blockedID] = "blocked"
     for child in mapPIDtoStatus.copy():
-        if mapPIDtoStatus[child] == "waiting":
-            mapPIDtoStatus[child] = "running"
-            psutil.Process(child).resume()
+        if child in mapPIDtoStatus:
+            if mapPIDtoStatus[child] == "waiting":
+                mapPIDtoStatus[child] = "running"
+                try:
+                    os.kill(child, signal.SIGCONT)
+                    break
+                except:
+                    pass
+    lockPIDMap.release()
     
     if operation == "get":
         lockCache.acquire()
         if blobName in checkTable:
+            myLeader = mapPIDtoLeader[blobName]
             myEvent = threading.Event()
-            mapPIDtoIO[threading.get_native_id()] = myEvent
-            checkTable[blobName].append(threading.get_native_id())
-            checkTableShadow[blobName].append(threading.get_native_id())
+            mapPIDtoIO[my_id] = myEvent
+            checkTable[blobName].append(my_id)
+            checkTableShadow[myLeader].append(my_id)
             lockCache.release()
             myEvent.wait()
-            blob_val = valueTable[blobName]
-            mapPIDtoIO.pop(threading.get_native_id())
-            checkTableShadow[blobName].remove(threading.get_native_id())
-            if len(checkTableShadow[blobName]) == 0:
-                checkTableShadow.pop(blobName)
-                valueTable.pop(blobName)
+            lockCache.acquire()
+            blob_val = valueTable[myLeader]
+            mapPIDtoIO.pop(my_id)
+            checkTableShadow[myLeader].remove(my_id)
+            if len(checkTableShadow[myLeader]) == 0:
+                checkTableShadow.pop(myLeader)
+                valueTable.pop(myLeader)
+            lockCache.release()
         else:
+            mapPIDtoLeader[blobName] = my_id
             checkTable[blobName] = []
-            checkTableShadow[blobName] = []
-            checkTable[blobName].append(threading.get_native_id())
+            checkTableShadow[my_id] = []
+            checkTable[blobName].append(my_id)
             lockCache.release()
             blob_val = (blob_client.download_blob()).readall()
             lockCache.acquire()
-            valueTable[blobName] = blob_val
-            checkTable[blobName].remove(threading.get_native_id())
+            valueTable[my_id] = blob_val
+            checkTable[blobName].remove(my_id)
             for elem in checkTable[blobName]:
                 mapPIDtoIO[elem].set()
             checkTable.pop(blobName)
             lockCache.release()
-    else:
-        blob_client.upload_blob(message["value"])
-        blob_val = "none"
-    
-    full_blob_name = blobName.split(".")
-    proc_blob_name = full_blob_name[0] + "_" + str(blockedID) + full_blob_name[1]
-    with open(proc_blob_name, "wb") as my_blob:
-        my_blob.write(blob_val)
 
+        full_blob_name = blobName.split(".")
+        proc_blob_name = full_blob_name[0] + "_" + str(blockedID) + "." + full_blob_name[1]
+        with open(proc_blob_name, "wb") as my_blob:
+            my_blob.write(blob_val)
+    else:
+        fReadname = message["value"]
+        fRead = open(fReadname,"rb")
+        value = fRead.read()
+        blob_client.upload_blob(value, overwrite=True)
+        blob_val = "none"
+
+    lockPIDMap.acquire()
     numRunning = 0 # number of running processes
     for child in mapPIDtoStatus.copy():
         if mapPIDtoStatus[child] == "running":
             numRunning += 1
     if numRunning < numCores:
         mapPIDtoStatus[blockedID] = "running"
+        os.kill(blockedID, signal.SIGCONT)
     else:
         mapPIDtoStatus[blockedID] = "waiting"
-        psutil.Process(blockedID).suspend()
+        os.kill(blockedID, signal.SIGSTOP)
+    lockPIDMap.release()
 
     messageToRet = json.dumps({"value":"OK"})
+    try:
+        os.kill(blockedID, signal.SIGCONT)
+    except:
+        pass
     clientSocket_.send(messageToRet.encode(encoding="utf-8"))
-    clientSocket_.close()
-    
-
-def interceptThread():
-    myHost = '0.0.0.0'
-    myPort = 3338
-
-    serverSocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    serverSocket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-    serverSocket.bind((myHost, myPort))
-    serverSocket.listen(1)
-
-    while True:
-        (clientSocket, _) = serverSocket.accept()
-        threading.Thread(target=threadChangeStatus, args=(clientSocket,)).start()
+    try:
+        os.kill(blockedID, signal.SIGCONT)
+    except:
+        pass
+    # clientSocket_.close()
 
 def IOThread():
     myHost = '0.0.0.0'
@@ -413,10 +394,6 @@ def run():
     threadUpdate.start()
 
     # Monitor I/O Block
-    # threadIntercept = threading.Thread(target=interceptThread)
-    # threadIntercept.start()
-
-    # Monitor I/O Block
     threadIntercept = threading.Thread(target=IOThread)
     threadIntercept.start()
 
@@ -424,7 +401,7 @@ def run():
     while(True):
         
         (clientSocket, address) = serverSocket.accept()
-        print("Accept a new connection from %s" % str(address))
+        print("Accept a new connection from %s" % str(address), flush=True)
         
         data_ = b''
 
@@ -529,6 +506,7 @@ def run():
         # The processes are running
         numIsRunning = 0
 
+        lockPIDMap.acquire()
         for child in mapPIDtoStatus.copy():
             if mapPIDtoStatus[child] == "running":
                 numIsRunning += 1
@@ -543,7 +521,6 @@ def run():
         if childProcess != 0:
             responseMapWindows.append([childProcess, [time.time(), -1]])
 
-
         if childProcess == 0:
             # begin fork
             myFunction(data_, clientSocket)
@@ -552,19 +529,18 @@ def run():
             # Append submit time to the responseMapWindows
             if waitForRunning:
                 # If there is no free resources (cpu core) for the process to run, then we set the childprocess to sleep.
-                logging.debug("Process {} is waiting for resources".format(childProcess))
                 mapPIDtoStatus[childProcess] = "waiting"
-                psutil.Process(childProcess).suspend()
+                os.kill(childProcess, signal.SIGSTOP)
             else:
                 # If there are free resources (cpu core) for the process to run, then we let the childprocess to run.
-                logging.debug("Process {} is running".format(childProcess))
                 mapPIDtoStatus[childProcess] = "running"
+            
             requestQueue.append(childProcess)
+            lockPIDMap.release()
             # The childprocess is running, when it is finished, let the queue find waiting childprocesses
             threadWait = threading.Thread(target=waitTermination, args=(childProcess,))
             threadWait.start()
 
 if __name__ == "__main__":
-    # main programe
-    # logging.basicConfig(level=logging.DEBUG)
+    # main program
     run()

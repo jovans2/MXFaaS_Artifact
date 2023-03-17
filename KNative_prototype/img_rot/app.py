@@ -13,15 +13,14 @@ def lambda_handler():
     blobName = "img10.jpg"
     dnld_blob.download_blob_new(blobName)
     full_blob_name = blobName.split(".")
-    proc_blob_name = full_blob_name[0] + "_" + str(os.getpid()) + full_blob_name[1]
+    proc_blob_name = full_blob_name[0] + "_" + str(os.getpid()) + "." + full_blob_name[1]
     
     image = Image.open(proc_blob_name)
     img = image.transpose(Image.ROTATE_90)
     img.save('tempImage_'+str(os.getpid())+'.jpeg')
 
-    fRead = open('tempImage_'+str(os.getpid())+'.jpeg',"rb")
-    value = fRead.read()
+    fReadname = 'tempImage_'+str(os.getpid())+'.jpeg'
     blobName = "img10_rot.jpg"
-    dnld_blob.upload_blob_new(blobName, value)
+    dnld_blob.upload_blob_new(blobName, fReadname)
     
     return {"Image":"rotated"}

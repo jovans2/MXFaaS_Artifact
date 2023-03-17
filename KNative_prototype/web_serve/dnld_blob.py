@@ -18,19 +18,6 @@ def download_blob_new(blobName):
 
     data_ = b''
     data_ += clientSocket.recv(1024)
-    dataStr = data_.decode('UTF-8')
-
-    while True:
-        dataStrList = dataStr.splitlines()
-        message = None   
-        try:
-            message = json.loads(dataStrList[-1])
-            break
-        except:
-            data_ += clientSocket.recv(1024)
-            dataStr = data_.decode('UTF-8')
-
-    return message
 
 def upload_blob_new(blobName, value):
     myHost = '0.0.0.0'
@@ -43,16 +30,3 @@ def upload_blob_new(blobName, value):
 
     data_ = b''
     data_ += clientSocket.recv(1024)
-    dataStr = data_.decode('UTF-8')
-
-    while True:
-        dataStrList = dataStr.splitlines()
-        message = None   
-        try:
-            message = json.loads(dataStrList[-1])
-            break
-        except:
-            data_ += clientSocket.recv(1024)
-            dataStr = data_.decode('UTF-8')
-
-    return message

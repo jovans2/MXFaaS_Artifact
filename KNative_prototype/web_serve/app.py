@@ -17,9 +17,8 @@ def lambda_handler():
     new_file = open("moneyTemp"+str(os.getpid())+".txt", "w")
     new_file.write(str(money))
     new_file.close()
-    fRead = open("moneyTemp"+str(os.getpid())+".txt","rb")
-    value = fRead.read()
+    fReadname = "moneyTemp"+str(os.getpid())+".txt" 
     blobName = "money.txt"
-    dnld_blob.upload_blob_new(blobName, value)
+    dnld_blob.upload_blob_new(blobName, fReadname)
 
     return {"Money":"withdrawn"}
