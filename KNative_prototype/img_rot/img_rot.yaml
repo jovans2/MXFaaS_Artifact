@@ -6,7 +6,7 @@ metadata:
 spec:
   template:
     spec:
-      containerConcurrency: 10000
+      containerConcurrency: 1000
       containers:
         - image: jovanvr97/img_rot_knative
     metadata:
