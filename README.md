@@ -19,3 +19,8 @@ This repository includes the prototype implementation of MXContainers, integrati
 the scripts to perform the characterization study on the open-source
 production-level traces and serverless benchmarks, and the
 experiment workflow to run these workloads
+
+
+## Artifact Description
+Our artifact includes the prototype implementation of MXContainers, integration of MXFaaS with KNative,
+the scripts to perform the characterization study on the open-source production-level traces and serverless benchmarks, and the experiment workflow to run these workloads.
