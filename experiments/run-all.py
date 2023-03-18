@@ -42,6 +42,7 @@ def EnforceActivityWindow(start_time, end_time, instance_events):
     return events_iit
 
 loads = [5, 30, 80]
+load_desc = ["LOW_LOAD", "MED_LOAD", "HIGH_LOAD"]
 
 output_file = open("run-all-out.txt", "w")
 
@@ -79,7 +80,7 @@ for load in loads:
         for thread in threads:
             thread.join()
 
-        print("=====================" + service + "=====================", file=output_file, flush=True)
+        print("=====================" + service + load_desc[loads.index(load)] + "=====================", file=output_file, flush=True)
         print(mean(times), file=output_file, flush=True)
         print(median(times), file=output_file, flush=True)
         print(np.percentile(times, 90), file=output_file, flush=True)
