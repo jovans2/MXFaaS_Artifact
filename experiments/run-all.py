@@ -19,8 +19,13 @@ for service in services:
 
 def lambda_func(service):
     global times
-    t1 = time.time()
-    r = requests.post(service, json={"name": "test"})
+    while True:
+        try:
+            t1 = time.time()
+            r = requests.post(service, json={"name": "test"})
+            break
+        except:
+            pass
     print(r.text)
     t2 = time.time()
     times.append(t2-t1)
@@ -37,7 +42,7 @@ def EnforceActivityWindow(start_time, end_time, instance_events):
         pass
     return events_iit
 
-loads = [10, 50, 80]
+loads = [10, 50, 100]
 
 output_file = open("run-all-out.txt", "w")
 
