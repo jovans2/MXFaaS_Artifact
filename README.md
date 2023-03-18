@@ -69,3 +69,30 @@ Download the traces in the <tt>characterization</tt> directory of our repository
 ### Installing application specific libraries
 To locally install all the libraries needed by our Python applications, execute
 <tt>./install-libs.sh</tt> in the characterization directory.
+
+
+## Experiment workflow
+
+### Characterization study
+After the Azure's traces are in the characterization directory, to run all of our characterization experiments 
+you need to execute <tt>./characterize.sh</tt>.
+This script will first analyze the request burstiness and
+bursty storage access pattern
+from
+Azure's traces, 
+then it will analyze the serverless benchmarks from 
+<tt>functions</tt> directory.
+
+## KNative prototype
+Running <tt>./deploy.sh</tt> in the <tt>KNative_prototype</tt> directory deploys the target functions as MXContainers on the KNative.
+To test if all functions are successfully deployed, run
+<tt>kn service list</tt>.
+It should show all functions and their urls.
+After 2 minutes, the flag <tt>READY</tt> should be set to <tt>True</tt>.
+Each function can be invoked with <tt>curl <ip-addr></tt>. 
+  To test all functions at once, run <tt>python3 knative-all.py</tt>.
+
+
+Next, we need to test the performance of MXContainers. There are three loads we test: Low, Medium and High. All loads use the Poission distribution.
+  The scripts to run theexperiments are located in the <tt>experiments</tt> directory.
+  To run all the experiments at once execute <tt>python3 run-all.py</tt>.
