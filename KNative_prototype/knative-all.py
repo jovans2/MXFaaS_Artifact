@@ -53,13 +53,13 @@ def EnforceActivityWindow(start_time, end_time, instance_events):
         pass
     return events_iit
 
-loads = [10, 50, 100]
+loads = [1, 5, 10]
 
 output_file = open("run-all-out.txt", "w")
 
 indR = 0
 for load in loads:
-    duration = 5
+    duration = 1
     seed = 100
     rate = load
     # generate Poisson's distribution of events 
