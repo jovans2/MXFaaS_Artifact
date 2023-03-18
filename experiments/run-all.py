@@ -26,7 +26,6 @@ def lambda_func(service):
             break
         except:
             pass
-    print(r.text)
     t2 = time.time()
     times.append(t2-t1)
 
