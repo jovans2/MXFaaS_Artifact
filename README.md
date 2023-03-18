@@ -45,32 +45,27 @@ This artifact requires Ubuntu 18.04+, Docker 23.0.1, minikube v1.29.0, and KNati
 ## Installation
 
 First, clone our artifact repository:
+<tt> git clone https://github.com/jovans2/MXFaaS_Artifact.git </tt>
 
-\texttt{git clone \textbackslash \\
-https://github.com/jovans2/MXFaaS\_Artifact.git}
+### Setting up the environment
+In the main directory of the repository, script <tt>setup.sh</tt>
+installs all the software dependencies: <tt>./setup.sh</tt>.
 
-\vspace{2pt}
-\noindent \textbf{Setting up the environment.}
-In the main directory of the repository, script \texttt{setup.sh}
-installs all the software dependencies: \texttt{./setup.sh}.
-
-\noindent The script will first install Docker and set up all the required privileges.
+The script will first install Docker and set up all the required privileges.
 Then, it will install minikube, as a local Kubernetes, convenient for testing purposes.
 Finally, it will install KNative.
 The script will ask twice to choose one of multiple options. 
 Both times choose the default value.
 
-\noindent Once the installation is completed, open a new terminal and execute the following command \texttt{minikube tunnel}.
+Once the installation is completed, open a new terminal and execute the following command <tt>minikube tunnel</tt>.
 
-\vspace{2pt}
-\noindent \textbf{Downloading open-source production-level traces.}
+### Downloading open-source production-level traces
 To reproduce our characterization study we need open source traces from the Azure's production workload.
-We need (i) \href{https://github.com/Azure/AzurePublicDataset/blob/master/AzureFunctionsBlobDataset2020.md}{\texttt{Azure Functions Blob Access Trace}}, and 
-(ii) \href{https://github.com/Azure/AzurePublicDataset/blob/master/AzureFunctionsInvocationTrace2021.md}{\texttt{Azure Functions Invocation Trace}}.
-Download the traces in the \texttt{characterization} directory of our repository by running
-\texttt{./download-traces.sh}.
+We need (i) [<tt>Azure Functions Blob Access Trace</tt>](https://github.com/Azure/AzurePublicDataset/blob/master/AzureFunctionsBlobDataset2020.md), and 
+(ii) [<tt>Azure Functions Invocation Trace</tt>](https://github.com/Azure/AzurePublicDataset/blob/master/AzureFunctionsInvocationTrace2021.md).
+Download the traces in the <tt>characterization</tt> directory of our repository by running
+<tt>./download-traces.sh</tt>.
 
-\vspace{2pt}
-\noindent \textbf{Installing application specific libraries.}
+### Installing application specific libraries
 To locally install all the libraries needed by our Python applications, execute
-\texttt{./install-libs.sh} in the characterization directory.
+<tt>./install-libs.sh</tt> in the characterization directory.
