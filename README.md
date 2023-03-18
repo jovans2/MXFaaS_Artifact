@@ -1,5 +1,7 @@
 # MXFaaS: Resource Sharing in Serverless Environments for Parallelism and Efficiency
 
+This repository is an artifact for the paper: <tt>MXFaaS: Resource Sharing in Serverless Environments for Parallelism and Efficiency</tt> by __Jovan Stojkovic (UIUC), Tianyin Xu (UIUC), Hubertus Franke (IBM Research), and Josep Torrellas (UIUC)__. The paper is published at <em>__International Symposium on Computer Architecture (ISCA), June 2023__</em>.
+
 MXFaaS is a novel serverless platform designed for high-efficiency. MXFaaS improves function performance by efficiently multiplexing processor
 cycles, I/O bandwidth, and memory/processor state between
 concurrently-executing instances of the same function. MXFaaS
