@@ -85,7 +85,7 @@ Azure's traces,
 then it will analyze the serverless benchmarks from 
 <tt>functions</tt> directory.
 
-## KNative prototype
+### KNative prototype
 Running <tt>./deploy.sh</tt> in the <tt>KNative_prototype</tt> directory deploys the target functions as MXContainers on the KNative.
 To test if all functions are successfully deployed, run
 <tt>kn service list</tt>.
