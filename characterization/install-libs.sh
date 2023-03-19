@@ -1,4 +1,5 @@
 sudo apt-get install python3-pip -y
+sudo apt-get install ffmpeg libsm6 libxext6  -y
 
 pip3 install --upgrade pip
 
