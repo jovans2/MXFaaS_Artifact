@@ -13,8 +13,8 @@ import logging
 
 # CPU_NUM is the maximum number of cores we can use
 # NODE_MAX is the maximum number of nodes we can use (SET NODE_MAX = 1 if we want to do simulation on one node)
-CPU_NUM = 4
-NODE_MAX = 2
+CPU_NUM = 16
+NODE_MAX = 1
 
 # map physical cores to function owners
 mapCores = {}
@@ -112,7 +112,7 @@ while(1):
             affinity_mask = message["affinity_mask"]
             print(affinity_mask)
             print(mapCores)
-            new_affinity_mask = []
+            new_affinity_mask = set()
             for i in mapCores:
                 if i not in affinity_mask and mapCores[i] == serviceName:
                     mapCores[i] = "none"
@@ -120,21 +120,22 @@ while(1):
                 if mapCores[i] == "none":
                     # if no service is using the core, then let the service use it
                     mapCores[i] = serviceName
-                    new_affinity_mask.append(i)
+                    new_affinity_mask.add(i)
                 elif mapCores[i] == serviceName:
                     # if the service is using the core, then let the service use it
-                    new_affinity_mask.append(i)
+                    new_affinity_mask.add(i)
                 elif mapCores[i] != serviceName:
                     # if the service using other service's core, then realloc one
                     realloc = True
                     for j in mapCores:
                         if mapCores[j] == "none":
                             mapCores[j] = serviceName
-                            new_affinity_mask.append(j)
+                            new_affinity_mask.add(j)
                             realloc = False
                             break
                     if realloc == True:
-                        reqCores[serviceName] = reqCores[serviceName] + 1
+                        reqCores[serviceName] = 1
+            new_affinity_mask = list(new_affinity_mask) # remove repeated cores
             if affinity_mask != new_affinity_mask and new_affinity_mask!=[]:
                 logging.info("Updating service " + serviceName + " to " + str(new_affinity_mask))
                 try:
@@ -157,6 +158,7 @@ while(1):
         for line in lines:
             if "Replicas" in line:
                 scaleUp[serviceName] = int(line.split()[1].split("/")[0])
+                break
         time.sleep(1)
 
     logging.info("Init environment finished.")
@@ -167,7 +169,7 @@ while(1):
 
     THRESHOLD = 0.7 # THRESHOLD to scale up
     THRESHOLD2 = 0.5 # THRESHOLD to scale down
-    SLO = 2 # SLO
+    SLO = 10 # SLO
     
     if ReTry == 1:
         time.sleep(2)
@@ -221,28 +223,37 @@ while(1):
             message = result.json()
         except Exception as e:
             print("Error in getting Q == " + str(e))
-        if p95 < THRESHOLD2 * SLO:
-            # Can scale down
-            if scaleUp[serviceName] > 1:
-                scaleUp[serviceName] = scaleUp[serviceName] - 1
-                print("Scale down " + serviceName + " to" + str(scaleUp[serviceName]))
-                try:
-                    output = subprocess.check_output("kn service update " + serviceName + " --scale-target " + str(scaleUp[serviceName]), shell=True).decode("utf-8")
-                except Exception as e:
-                    print("Error in kn service update == " + str(e))
-            # Can be donator
-            for recipient in reqCores:
-                while(reqCores[recipient] > 0 and len(mapFuncToCores[serviceName]) > 1):
-                    for coreID in mapFuncToCores[serviceName]:
-                        mapCores[coreID] = recipient
-                        mapFuncToCores[serviceName].remove(coreID)
-                        mapFuncToCores[recipient].append(coreID)
-                        reqCores[recipient] = 0
-                        logging.info("Updating service " + serviceName + " to " + str(mapFuncToCores[serviceName]) + "(Donator)")
-                        requests.post(getUrlByFuncName(serviceName), json={"numCores": len(mapFuncToCores[serviceName]),"affinity_mask": mapFuncToCores[serviceName]})
-                        
-                        logging.info("Updatings service " + recipient + " to " + str(mapFuncToCores[recipient]) + "(Recipient)")
-                        requests.post(getUrlByFuncName(recipient), json={"numCores": len(mapFuncToCores[recipient]),"affinity_mask": mapFuncToCores[i]})
+        if "p95" in message:
+            p95 = message["p95"]
+            if p95 < THRESHOLD2 * SLO:
+                # Can scale down
+                if scaleUp[serviceName] > 1:
+                    scaleUp[serviceName] = scaleUp[serviceName] - 1
+                    print("Scale down " + serviceName + " to " + str(scaleUp[serviceName]))
+                    try:
+                        output = subprocess.check_output("kn service update " + serviceName + " --scale-target " + str(scaleUp[serviceName]), shell=True).decode("utf-8")
+                    except Exception as e:
+                        print("Error in kn service update == " + str(e))
+                else:
+                    # Can be donator
+                    for recipient in reqCores:
+                        while(reqCores[recipient] > 0 and len(mapFuncToCores[serviceName]) > 1): # when there has one service request core and it has been initialized
+                            for coreID in mapFuncToCores[serviceName]:
+                                mapCores[coreID] = recipient
+                                mapFuncToCores[serviceName].remove(coreID)
+                                mapFuncToCores[recipient].append(coreID)
+                                reqCores[recipient] = 0
+                                
+                                logging.info("Updating service " + serviceName + " to " + str(mapFuncToCores[serviceName]) + "(Donator)")
+                                requests.post(getUrlByFuncName(serviceName), json={"numCores": len(mapFuncToCores[serviceName]),"affinity_mask": mapFuncToCores[serviceName]})
+                                
+                                logging.info("Updating service " + recipient + " to " + str(mapFuncToCores[recipient]) + "(Recipient)")
+                                requests.post(getUrlByFuncName(recipient), json={"numCores": len(mapFuncToCores[recipient]),"affinity_mask": mapFuncToCores[recipient]})
+                                break
+        else:
+            print("Fail in getting p95 for " + serviceName)
+            ReTry = 1
+            
         time.sleep(1)
 
 
@@ -262,7 +273,7 @@ while(1):
                 output = subprocess.check_output("kn service update " + serviceName + " --scale-target " + str(scaleUp[serviceName]), shell=True).decode("utf-8")
                 time.sleep(3)
                 # Update affinity_mask to new Replicas
-                for i in range(3):
+                for i in range(NODE_MAX*3): # load balance 50:50
                     requests.post(getUrlByFuncName(serviceName), json={"numCores": len(getAffinityMaskByFuncName(serviceName)),"affinity_mask": getAffinityMaskByFuncName(serviceName)})
             except Exception as e:
                 print("Error in kn service update == " + str(e))
