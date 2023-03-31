@@ -60,4 +60,4 @@ kubectl apply -f https://github.com/knative/serving/releases/download/knative-v1
 
 sudo apt-get install python3-pip -y
 pip3 install docker
-pip3 install numpy==1.23.1
+pip3 install numpy==1.19.5
