@@ -28,7 +28,7 @@ def main(params):
             t4 = time.time()
             my_blob.write(download_stream.readall())
         image = Image.open(blobName)
-        images.append(image)
+        images[blobName] = image
     else:
         image = images[blobName]
     width, height = image.size
