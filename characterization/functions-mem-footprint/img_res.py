@@ -37,6 +37,7 @@ def main(params):
             download_stream = blob_client.download_blob()
             my_blob.write(download_stream.readall())
         image = Image.open(blobName)
+        images.append(image)
     else:
         image = images[blobName]
     width, height = image.size

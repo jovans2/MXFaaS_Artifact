@@ -6,18 +6,31 @@ connection_string = "DefaultEndpointsProtocol=https;AccountName=serverlesscache;
 blob_service_client = BlobServiceClient.from_connection_string(connection_string)
 container_client = blob_service_client.get_container_client("artifacteval")
 
+images = {}
+for indI in range(0, 20):
+    blbName = "img" + str(indI) + ".png"
+    blob_client = BlobClient.from_connection_string(connection_string, container_name="artifacteval", blob_name=blbName)
+    with open(blbName, "wb") as my_blob:
+        download_stream = blob_client.download_blob()
+        my_blob.write(download_stream.readall())
+    images[blbName] = Image.open(blbName)
+
 fileAppend = open("../funcs.txt", "a")
 
 def main(params):
     t1 = time.time()
-    blobName = "img10.jpg"
-    blob_client = BlobClient.from_connection_string(connection_string, container_name="artifacteval", blob_name=blobName)
-    with open(blobName, "wb") as my_blob:
-        t3 = time.time()
-        download_stream = blob_client.download_blob()
-        t4 = time.time()
-        my_blob.write(download_stream.readall())
-    image = Image.open(blobName)
+    blobName = "img20.png"
+    if blobName not in images:
+        blob_client = BlobClient.from_connection_string(connection_string, container_name="artifacteval", blob_name=blobName)
+        with open(blobName, "wb") as my_blob:
+            t3 = time.time()
+            download_stream = blob_client.download_blob()
+            t4 = time.time()
+            my_blob.write(download_stream.readall())
+        image = Image.open(blobName)
+        images.append(image)
+    else:
+        image = images[blobName]
     width, height = image.size
     # Setting the points for cropped image
     left = 4
