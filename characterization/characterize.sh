@@ -9,6 +9,10 @@ python3 img_rot.py
 python3 ml_train.py
 python3 vid_proc.py
 python3 web_serve.py
+python3 lr_serving.py
+python3 rnn_serving.py
+python3 create_ord.py
+python3 pay_ord.py
 
 cd ../functions-mem-footprint
 
@@ -18,3 +22,7 @@ python3 img_rot.py
 python3 ml_train.py
 python3 vid_proc.py
 python3 web_serve.py
+python3 lr_serving.py
+python3 rnn_serving.py
+python3 create_ord.py
+python3 pay_ord.py
