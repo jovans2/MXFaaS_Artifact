@@ -31,7 +31,7 @@ def main(params):
     blob_client.upload_blob(value, overwrite=True)
     t6 = time.time()
     t2 = time.time()
-    print("--- WEB SERVE ---", file=fileAppend)
+    print("--- Pay ord ---", file=fileAppend)
     print("Handler time = ", t2-t1, file=fileAppend)
     print("Idle time = ", t4+t6-t3-t5, file=fileAppend)
     return {"Order":"Payed"}

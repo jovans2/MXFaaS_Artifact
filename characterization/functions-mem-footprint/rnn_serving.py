@@ -13,7 +13,7 @@ from azure.storage.blob import BlobServiceClient, BlobClient
 fileAppend = open("../funcs.txt", "a")
 
 memoryUse = python_process.memory_info()[0]/2.**20  # memory use in MB
-print("--- CNN SERVING ---", file=fileAppend)
+print("--- RNN SERVING ---", file=fileAppend)
 print('memory use 1:', memoryUse-memoryUse_old, file=fileAppend)
 
 connection_string = "DefaultEndpointsProtocol=https;AccountName=serverlesscache;AccountKey=O7MZkxwjyBWTcPL4fDoHi6n8GsYECQYiMe+KLOIPLpzs9BoMONPg2thf1wM1pxlVxuICJvqL4hWb+AStIKVWow==;EndpointSuffix=core.windows.net"
