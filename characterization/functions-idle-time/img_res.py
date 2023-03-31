@@ -38,9 +38,9 @@ def main(params):
     right = 100
     bottom = 3 * height / 5
     im1 = image.crop((left, top, right, bottom))
-    im1.save("newImage.jpeg")
+    im1.save("newImage.png")
 
-    fRead = open("newImage.jpeg","rb")
+    fRead = open("newImage.png","rb")
     value = fRead.read()
     blobName = "img10_res.jpg"
     blob_client = BlobClient.from_connection_string(connection_string, container_name="artifacteval", blob_name=blobName)
