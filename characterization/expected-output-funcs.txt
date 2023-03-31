@@ -22,11 +22,11 @@ memory use 2: 214.171875
 memory use 3: 72.23828125
 --- IMG RES ---
 memory use 1: 40.3046875
-memory use 2: 0.203125
+memory use 2: 3.203125
 memory use 3: 3.6640625
 --- IMG ROT ---
 memory use 1: 40.01171875
-memory use 2: 0.15625
+memory use 2: 3.15625
 memory use 3: 3.6640625
 --- ML TRAIN ---
 memory use 1: 117.91796875
