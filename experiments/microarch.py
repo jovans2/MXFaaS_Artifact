@@ -63,7 +63,7 @@ rt1 = t2 - t1
 
 times = []
 tLoop = time.time()
-while time.time() - tLoop <= 2:
+while time.time() - tLoop <= 20:
     t1 = time.time()
     lambda_handler_1()
     t2 = time.time()
@@ -129,7 +129,7 @@ rt1 = t2 - t1
 
 times = []
 tLoop = time.time()
-while time.time() - tLoop <= 2:
+while time.time() - tLoop <= 20:
     t1 = time.time()
     lambda_handler_2()
     t2 = time.time()
@@ -192,16 +192,19 @@ t1 = time.time()
 lambda_handler_3()
 t2 = time.time()
 rt1 = t2 - t1
+print("RNN Serve first done at second = ", t2-tStart)
 
-lambda_handler_3()
-lambda_handler_3()
-lambda_handler_3()
+times = []
+tLoop = time.time()
+while time.time() - tLoop <= 20:
+    t1 = time.time()
+    lambda_handler_3()
+    t2 = time.time()
+    rt2 = t2 - t1
+    times.append(rt2)
 
-t1 = time.time()
-lambda_handler_3()
-t2 = time.time()
-rt2 = t2 - t1
-
+rt2 = sum(times)/len(times)
+print("RNN Serve last done at second = ", t2-tStart)
 print("RNN Serve => Response time reduction = ", rt2/rt1)
 
 import time
@@ -251,17 +254,20 @@ t1 = time.time()
 lambda_handler_4()
 t2 = time.time()
 rt1 = t2 - t1
+print("MLTrain first done at second = ", t2-tStart)
 
-lambda_handler_4()
-lambda_handler_4()
-lambda_handler_4()
+times = []
+tLoop = time.time()
+while time.time() - tLoop <= 20:
+    t1 = time.time()
+    lambda_handler_4()
+    t2 = time.time()
+    rt2 = t2 - t1
+    times.append(rt2)
 
-t1 = time.time()
-lambda_handler_4()
-t2 = time.time()
-rt2 = t2 - t1
-
-print("ML Train => Response time reduction = ", rt2/rt1)
+rt2 = sum(times)/len(times)
+print("MLTrain last done at second = ", t2-tStart)
+print("MLTrain => Response time reduction = ", rt2/rt1)
 
 import time
 import cv2
@@ -311,16 +317,19 @@ t1 = time.time()
 lambda_handler_5()
 t2 = time.time()
 rt1 = t2 - t1
+print("VidConv first done at second = ", t2-tStart)
 
-lambda_handler_5()
-lambda_handler_5()
-lambda_handler_5()
+tLoop = time.time()
+times = []
+while time.time() - tLoop <= 20:
+    t1 = time.time()
+    lambda_handler_5()
+    t2 = time.time()
+    rt2 = t2 - t1
+    times.append(rt2)
 
-t1 = time.time()
-lambda_handler_5()
-t2 = time.time()
-rt2 = t2 - t1
-
+rt2 = sum(times)/len(times)
+print("VidConv last done at second = ", t2-tStart)
 print("VidConv => Response time reduction = ", rt2/rt1)
 
 import time
@@ -368,16 +377,19 @@ t1 = time.time()
 lambda_handler_6()
 t2 = time.time()
 rt1 = t2 - t1
+print("ImgRes first done at second = ", t2-tStart)
 
-lambda_handler_6()
-lambda_handler_6()
-lambda_handler_6()
+tLoop = time.time()
+times = []
+while time.time() - tLoop <= 20:
+    t1 = time.time()
+    lambda_handler_6()
+    t2 = time.time()
+    rt2 = t2 - t1
+    times.append(rt2)
 
-t1 = time.time()
-lambda_handler_6()
-t2 = time.time()
-rt2 = t2 - t1
-
+rt2 = sum(times)/len(times)
+print("ImgRes last done at second = ", t2-tStart)
 print("ImgRes => Response time reduction = ", rt2/rt1)
 
 import time
@@ -412,16 +424,19 @@ t1 = time.time()
 lambda_handler_7()
 t2 = time.time()
 rt1 = t2 - t1
+print("ImgRot first done at second = ", t2-tStart)
 
-lambda_handler_7()
-lambda_handler_7()
-lambda_handler_7()
+times = []
+tLoop = time.time()
+while time.time() - tLoop <= 20:
+    t1 = time.time()
+    lambda_handler_7()
+    t2 = time.time()
+    rt2 = t2 - t1
+    times.append(rt2)
 
-t1 = time.time()
-lambda_handler_7()
-t2 = time.time()
-rt2 = t2 - t1
-
+rt2 = sum(times)/len(times)
+print("ImgRot last done at second = ", t2-tStart)
 print("ImgRot => Response time reduction = ", rt2/rt1)
 
 import time
@@ -464,14 +479,16 @@ t1 = time.time()
 lambda_handler_8()
 t2 = time.time()
 rt1 = t2 - t1
+print("CreateOrd first done at second = ", t2-tStart)
 
-lambda_handler_8()
-lambda_handler_8()
-lambda_handler_8()
-
-t1 = time.time()
-lambda_handler_8()
-t2 = time.time()
-rt2 = t2 - t1
-
+times = []
+tLoop = time.time()
+while time.time() - tLoop <= 20:
+    t1 = time.time()
+    lambda_handler_8()
+    t2 = time.time()
+    rt2 = t2 - t1
+    times.append(rt2)
+rt2 = sum(times)/len(times)
+print("CreateOrd last done at second = ", t2-tStart)
 print("CreateOrd => Response time reduction = ", rt2/rt1)
