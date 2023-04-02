@@ -15,7 +15,7 @@ def measure_cpu_util():
         time.sleep(2) 
         output = os.popen("docker stats " + service+  " --no-stream --format '{{.CPUPerc}}'").read()   
         flout = float(output[:-2])
-        perc_cpu = min(100, flout-100)
+        perc_cpu = max(0, flout-100)
         print(print(f"number: {perc_cpu:.2f}"))
 
 containers = ["MXContainer", "Baseline"]
