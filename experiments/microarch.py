@@ -68,7 +68,7 @@ while time.time() - tLoop <= 10:
 t1 = time.time()
 lambda_handler_1()
 t2 = time.time()
-rt2 = time.time()
+rt2 = t2 - t1
 print("LR Serve last done at second = ", t2-tStart)
 
 print("LR Serve => Response time reduction = ", rt2/rt1)
