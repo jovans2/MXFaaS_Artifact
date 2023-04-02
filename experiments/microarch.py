@@ -64,7 +64,7 @@ rt1 = t2 - t1
 
 times = []
 tLoop = time.time()
-while time.time() - tLoop <= 20:
+while time.time() - tLoop <= 10:
     t1 = time.time()
     lambda_handler_1()
     t2 = time.time()
@@ -130,7 +130,7 @@ rt1 = t2 - t1
 
 times = []
 tLoop = time.time()
-while time.time() - tLoop <= 20:
+while time.time() - tLoop <= 10:
     t1 = time.time()
     lambda_handler_2()
     t2 = time.time()
@@ -197,7 +197,7 @@ print("RNN Serve first done at second = ", t2-tStart)
 
 times = []
 tLoop = time.time()
-while time.time() - tLoop <= 20:
+while time.time() - tLoop <= 10:
     t1 = time.time()
     lambda_handler_3()
     t2 = time.time()
@@ -259,7 +259,7 @@ print("MLTrain first done at second = ", t2-tStart)
 
 times = []
 tLoop = time.time()
-while time.time() - tLoop <= 20:
+while time.time() - tLoop <= 10:
     t1 = time.time()
     lambda_handler_4()
     t2 = time.time()
@@ -322,7 +322,7 @@ print("VidConv first done at second = ", t2-tStart)
 
 tLoop = time.time()
 times = []
-while time.time() - tLoop <= 20:
+while time.time() - tLoop <= 10:
     t1 = time.time()
     lambda_handler_5()
     t2 = time.time()
@@ -382,7 +382,7 @@ print("ImgRes first done at second = ", t2-tStart)
 
 tLoop = time.time()
 times = []
-while time.time() - tLoop <= 20:
+while time.time() - tLoop <= 10:
     t1 = time.time()
     lambda_handler_6()
     t2 = time.time()
@@ -429,7 +429,7 @@ print("ImgRot first done at second = ", t2-tStart)
 
 times = []
 tLoop = time.time()
-while time.time() - tLoop <= 20:
+while time.time() - tLoop <= 10:
     t1 = time.time()
     lambda_handler_7()
     t2 = time.time()
@@ -484,7 +484,7 @@ print("CreateOrd first done at second = ", t2-tStart)
 
 times = []
 tLoop = time.time()
-while time.time() - tLoop <= 20:
+while time.time() - tLoop <= 10:
     t1 = time.time()
     lambda_handler_8()
     t2 = time.time()
