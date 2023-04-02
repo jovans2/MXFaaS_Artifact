@@ -51,28 +51,21 @@ model = joblib.load('lr_model.pk')
 print('Model is ready')
 
 def lambda_handler_1():
-    print("My pid = " + str(os.getpid()))
     model.predict(X)
 
 t1 = time.time()
-child_pid = os.fork()
-if child_pid == 0:
-    lambda_handler_1()
-    os._exit(os.EX_OK)
-else:
-    output1 = os.popen("perf stat -e branches,branch-misses,L1-dcache-loads,L1-dcache-load-misses -p " + str(child_pid)).read()
-    print(output1)
+lambda_handler_1()
 t2 = time.time()
 rt1 = t2 - t1
 
-lambda_handler_1()
-lambda_handler_1()
-lambda_handler_1()
-
-t1 = time.time()
-lambda_handler_1()
-t2 = time.time()
-rt2 = t2 - t1
+times = []
+for _ in range(1000):
+    t1 = time.time()
+    lambda_handler_1()
+    t2 = time.time()
+    rt2 = t2 - t1
+    times.append(rt2)
+rt2 = sum(times)/len(times)
 
 print("LR Serve => Response time reduction = ", rt2/rt1)
 
