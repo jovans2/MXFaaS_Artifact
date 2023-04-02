@@ -1,0 +1,24 @@
+LR Serve first done at second =  9.572263717651367
+LR Serve last done at second =  19.572345972061157
+LR Serve => Response time reduction =  0.4510460251046025
+CNN Serve first done at second =  21.147321701049805
+CNN Serve last done at second =  31.45834970474243
+CNN Serve => Response time reduction =  0.7199999269599165
+RNN Serve first done at second =  33.36118149757385
+RNN Serve last done at second =  43.375192642211914
+RNN Serve => Response time reduction =  0.8826743651320832
+MLTrain first done at second =  52.65940976142883
+MLTrain last done at second =  65.8178961277008
+MLTrain => Response time reduction =  0.9260675937859138
+VidConv first done at second =  67.72637367248535
+VidConv last done at second =  77.78013467788696
+VidConv => Response time reduction =  0.8604064008816342
+ImgRes first done at second =  83.13585114479065
+ImgRes last done at second =  93.13613748550415
+ImgRes => Response time reduction =  0.6564724684004068
+ImgRot first done at second =  94.0619728565216
+ImgRot last done at second =  104.86844944953918
+ImgRot => Response time reduction =  0.9242564227380997
+CreateOrd first done at second =  105.38547897338867
+CreateOrd last done at second =  115.86001181602478
+CreateOrd => Response time reduction =  0.9013310533201736
