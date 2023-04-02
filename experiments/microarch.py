@@ -62,16 +62,14 @@ t2 = time.time()
 print("LR Serve first done at second = ", t2-tStart)
 rt1 = t2 - t1
 
-times = []
 tLoop = time.time()
 while time.time() - tLoop <= 10:
-    t1 = time.time()
     lambda_handler_1()
-    t2 = time.time()
-    rt2 = t2 - t1
-    times.append(rt2)
+t1 = time.time()
+lambda_handler_1()
+t2 = time.time()
+rt2 = time.time()
 print("LR Serve last done at second = ", t2-tStart)
-rt2 = np.percentile(times, 50)
 
 print("LR Serve => Response time reduction = ", rt2/rt1)
 
@@ -128,15 +126,13 @@ t2 = time.time()
 print("CNN Serve first done at second = ", t2-tStart)
 rt1 = t2 - t1
 
-times = []
 tLoop = time.time()
 while time.time() - tLoop <= 10:
-    t1 = time.time()
     lambda_handler_2()
-    t2 = time.time()
-    rt2 = t2 - t1
-    times.append(rt2)
-rt2 = np.percentile(times, 50)
+t1 = time.time()
+lambda_handler_2()
+t2 = time.time()
+rt2 = t2 - t1
 print("CNN Serve last done at second = ", t2-tStart)
 
 print("CNN Serve => Response time reduction = ", rt2/rt1)
@@ -195,16 +191,15 @@ t2 = time.time()
 rt1 = t2 - t1
 print("RNN Serve first done at second = ", t2-tStart)
 
-times = []
 tLoop = time.time()
 while time.time() - tLoop <= 10:
-    t1 = time.time()
     lambda_handler_3()
-    t2 = time.time()
-    rt2 = t2 - t1
-    times.append(rt2)
 
-rt2 = np.percentile(times, 50)
+t1 = time.time()
+lambda_handler_3()
+t2 = time.time()
+rt2 = t2 - t1
+
 print("RNN Serve last done at second = ", t2-tStart)
 print("RNN Serve => Response time reduction = ", rt2/rt1)
 
@@ -257,16 +252,15 @@ t2 = time.time()
 rt1 = t2 - t1
 print("MLTrain first done at second = ", t2-tStart)
 
-times = []
 tLoop = time.time()
 while time.time() - tLoop <= 10:
-    t1 = time.time()
     lambda_handler_4()
-    t2 = time.time()
-    rt2 = t2 - t1
-    times.append(rt2)
 
-rt2 = np.percentile(times, 50)
+t1 = time.time()
+lambda_handler_4()
+t2 = time.time()
+rt2 = t2 - t1
+
 print("MLTrain last done at second = ", t2-tStart)
 print("MLTrain => Response time reduction = ", rt2/rt1)
 
@@ -321,15 +315,13 @@ rt1 = t2 - t1
 print("VidConv first done at second = ", t2-tStart)
 
 tLoop = time.time()
-times = []
 while time.time() - tLoop <= 10:
-    t1 = time.time()
     lambda_handler_5()
-    t2 = time.time()
-    rt2 = t2 - t1
-    times.append(rt2)
 
-rt2 = np.percentile(times, 50)
+t1 = time.time()
+lambda_handler_5()
+t2 = time.time()
+rt2 = t2 - t1
 print("VidConv last done at second = ", t2-tStart)
 print("VidConv => Response time reduction = ", rt2/rt1)
 
@@ -381,15 +373,13 @@ rt1 = t2 - t1
 print("ImgRes first done at second = ", t2-tStart)
 
 tLoop = time.time()
-times = []
 while time.time() - tLoop <= 10:
-    t1 = time.time()
     lambda_handler_6()
-    t2 = time.time()
-    rt2 = t2 - t1
-    times.append(rt2)
 
-rt2 = np.percentile(times, 50)
+t1 = time.time()
+lambda_handler_6()
+t2 = time.time()
+rt2 = t2 - t1
 print("ImgRes last done at second = ", t2-tStart)
 print("ImgRes => Response time reduction = ", rt2/rt1)
 
@@ -427,16 +417,14 @@ t2 = time.time()
 rt1 = t2 - t1
 print("ImgRot first done at second = ", t2-tStart)
 
-times = []
 tLoop = time.time()
 while time.time() - tLoop <= 10:
-    t1 = time.time()
     lambda_handler_7()
-    t2 = time.time()
-    rt2 = t2 - t1
-    times.append(rt2)
 
-rt2 = np.percentile(times, 50)
+t1 = time.time()
+lambda_handler_7()
+t2 = time.time()
+rt2 = t2 - t1
 print("ImgRot last done at second = ", t2-tStart)
 print("ImgRot => Response time reduction = ", rt2/rt1)
 
@@ -482,14 +470,13 @@ t2 = time.time()
 rt1 = t2 - t1
 print("CreateOrd first done at second = ", t2-tStart)
 
-times = []
 tLoop = time.time()
 while time.time() - tLoop <= 10:
-    t1 = time.time()
     lambda_handler_8()
-    t2 = time.time()
-    rt2 = t2 - t1
-    times.append(rt2)
-rt2 = np.percentile(times, 50)
+
+t1 = time.time()
+lambda_handler_8()
+t2 = time.time()
+rt2 = t2 - t1
 print("CreateOrd last done at second = ", t2-tStart)
 print("CreateOrd => Response time reduction = ", rt2/rt1)
