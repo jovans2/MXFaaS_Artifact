@@ -57,7 +57,7 @@ t1 = time.time()
 child_pid = os.fork()
 if child_pid == 0:
     lambda_handler_1()
-    exit(-1)
+    os._exit(os.EX_OK)
 else:
     output1 = os.popen("perf stat -e branches,branch-misses,L1-dcache-loads,L1-dcache-load-misses -p " + str(child_pid)).read()
     print(output1)
