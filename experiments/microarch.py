@@ -70,7 +70,7 @@ while time.time() - tLoop <= 20:
     rt2 = t2 - t1
     times.append(rt2)
 print("LR Serve last done at second = ", t2-tStart)
-rt2 = sum(times)/len(times)
+rt2 = min(times)
 
 print("LR Serve => Response time reduction = ", rt2/rt1)
 
@@ -135,7 +135,7 @@ while time.time() - tLoop <= 20:
     t2 = time.time()
     rt2 = t2 - t1
     times.append(rt2)
-rt2 = sum(times)/len(times)
+rt2 = min(times)
 print("CNN Serve last done at second = ", t2-tStart)
 
 print("CNN Serve => Response time reduction = ", rt2/rt1)
@@ -203,7 +203,7 @@ while time.time() - tLoop <= 20:
     rt2 = t2 - t1
     times.append(rt2)
 
-rt2 = sum(times)/len(times)
+rt2 = min(times)
 print("RNN Serve last done at second = ", t2-tStart)
 print("RNN Serve => Response time reduction = ", rt2/rt1)
 
@@ -265,7 +265,7 @@ while time.time() - tLoop <= 20:
     rt2 = t2 - t1
     times.append(rt2)
 
-rt2 = sum(times)/len(times)
+rt2 = min(times)
 print("MLTrain last done at second = ", t2-tStart)
 print("MLTrain => Response time reduction = ", rt2/rt1)
 
@@ -328,7 +328,7 @@ while time.time() - tLoop <= 20:
     rt2 = t2 - t1
     times.append(rt2)
 
-rt2 = sum(times)/len(times)
+rt2 = min(times)
 print("VidConv last done at second = ", t2-tStart)
 print("VidConv => Response time reduction = ", rt2/rt1)
 
@@ -388,7 +388,7 @@ while time.time() - tLoop <= 20:
     rt2 = t2 - t1
     times.append(rt2)
 
-rt2 = sum(times)/len(times)
+rt2 = min(times)
 print("ImgRes last done at second = ", t2-tStart)
 print("ImgRes => Response time reduction = ", rt2/rt1)
 
@@ -435,7 +435,7 @@ while time.time() - tLoop <= 20:
     rt2 = t2 - t1
     times.append(rt2)
 
-rt2 = sum(times)/len(times)
+rt2 = min(times)
 print("ImgRot last done at second = ", t2-tStart)
 print("ImgRot => Response time reduction = ", rt2/rt1)
 
@@ -489,6 +489,6 @@ while time.time() - tLoop <= 20:
     t2 = time.time()
     rt2 = t2 - t1
     times.append(rt2)
-rt2 = sum(times)/len(times)
+rt2 = min(times)
 print("CreateOrd last done at second = ", t2-tStart)
 print("CreateOrd => Response time reduction = ", rt2/rt1)
