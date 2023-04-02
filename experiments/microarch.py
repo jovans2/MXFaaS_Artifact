@@ -1,4 +1,5 @@
 import os
+import numpy as np
 
 affinity_mask = {0}
 pid = os.getpid()
@@ -70,7 +71,7 @@ while time.time() - tLoop <= 20:
     rt2 = t2 - t1
     times.append(rt2)
 print("LR Serve last done at second = ", t2-tStart)
-rt2 = min(times)
+rt2 = np.percentile(times, 50)
 
 print("LR Serve => Response time reduction = ", rt2/rt1)
 
@@ -135,7 +136,7 @@ while time.time() - tLoop <= 20:
     t2 = time.time()
     rt2 = t2 - t1
     times.append(rt2)
-rt2 = min(times)
+rt2 = np.percentile(times, 50)
 print("CNN Serve last done at second = ", t2-tStart)
 
 print("CNN Serve => Response time reduction = ", rt2/rt1)
@@ -203,7 +204,7 @@ while time.time() - tLoop <= 20:
     rt2 = t2 - t1
     times.append(rt2)
 
-rt2 = min(times)
+rt2 = np.percentile(times, 50)
 print("RNN Serve last done at second = ", t2-tStart)
 print("RNN Serve => Response time reduction = ", rt2/rt1)
 
@@ -265,7 +266,7 @@ while time.time() - tLoop <= 20:
     rt2 = t2 - t1
     times.append(rt2)
 
-rt2 = min(times)
+rt2 = np.percentile(times, 50)
 print("MLTrain last done at second = ", t2-tStart)
 print("MLTrain => Response time reduction = ", rt2/rt1)
 
@@ -328,7 +329,7 @@ while time.time() - tLoop <= 20:
     rt2 = t2 - t1
     times.append(rt2)
 
-rt2 = min(times)
+rt2 = np.percentile(times, 50)
 print("VidConv last done at second = ", t2-tStart)
 print("VidConv => Response time reduction = ", rt2/rt1)
 
@@ -388,7 +389,7 @@ while time.time() - tLoop <= 20:
     rt2 = t2 - t1
     times.append(rt2)
 
-rt2 = min(times)
+rt2 = np.percentile(times, 50)
 print("ImgRes last done at second = ", t2-tStart)
 print("ImgRes => Response time reduction = ", rt2/rt1)
 
@@ -435,7 +436,7 @@ while time.time() - tLoop <= 20:
     rt2 = t2 - t1
     times.append(rt2)
 
-rt2 = min(times)
+rt2 = np.percentile(times, 50)
 print("ImgRot last done at second = ", t2-tStart)
 print("ImgRot => Response time reduction = ", rt2/rt1)
 
@@ -489,6 +490,6 @@ while time.time() - tLoop <= 20:
     t2 = time.time()
     rt2 = t2 - t1
     times.append(rt2)
-rt2 = min(times)
+rt2 = np.percentile(times, 50)
 print("CreateOrd last done at second = ", t2-tStart)
 print("CreateOrd => Response time reduction = ", rt2/rt1)
