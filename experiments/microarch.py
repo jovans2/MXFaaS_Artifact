@@ -51,6 +51,7 @@ model = joblib.load('lr_model.pk')
 print('Model is ready')
 
 def lambda_handler_1():
+    print("My pid = " + str(os.getpid()))
     model.predict(X)
 
 t1 = time.time()
