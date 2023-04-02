@@ -11,6 +11,8 @@ import pandas as pd
 import re
 from azure.storage.blob import BlobServiceClient, BlobClient
 
+tStart = time.time()
+
 connection_string = "DefaultEndpointsProtocol=https;AccountName=serverlesscache;AccountKey=O7MZkxwjyBWTcPL4fDoHi6n8GsYECQYiMe+KLOIPLpzs9BoMONPg2thf1wM1pxlVxuICJvqL4hWb+AStIKVWow==;EndpointSuffix=core.windows.net"
 blob_service_client = BlobServiceClient.from_connection_string(connection_string)
 container_client = blob_service_client.get_container_client("artifacteval")
@@ -56,19 +58,21 @@ def lambda_handler_1():
 t1 = time.time()
 lambda_handler_1()
 t2 = time.time()
+print("LR Serve first done at second = ", t2-tStart)
 rt1 = t2 - t1
 
 times = []
-for _ in range(1000):
+tLoop = time.time()
+while time.time() - tLoop <= 2:
     t1 = time.time()
     lambda_handler_1()
     t2 = time.time()
     rt2 = t2 - t1
     times.append(rt2)
+print("LR Serve last done at second = ", t2-tStart)
 rt2 = sum(times)/len(times)
 
 print("LR Serve => Response time reduction = ", rt2/rt1)
-
 
 import time
 from mxnet import gluon
@@ -120,16 +124,19 @@ def lambda_handler_2():
 t1 = time.time()
 lambda_handler_2()
 t2 = time.time()
+print("CNN Serve first done at second = ", t2-tStart)
 rt1 = t2 - t1
 
-lambda_handler_2()
-lambda_handler_2()
-lambda_handler_2()
-
-t1 = time.time()
-lambda_handler_2()
-t2 = time.time()
-rt2 = t2 - t1
+times = []
+tLoop = time.time()
+while time.time() - tLoop <= 2:
+    t1 = time.time()
+    lambda_handler_2()
+    t2 = time.time()
+    rt2 = t2 - t1
+    times.append(rt2)
+rt2 = sum(times)/len(times)
+print("CNN Serve last done at second = ", t2-tStart)
 
 print("CNN Serve => Response time reduction = ", rt2/rt1)
 
