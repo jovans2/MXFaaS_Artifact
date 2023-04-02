@@ -54,12 +54,15 @@ def lambda_handler_1():
     model.predict(X)
 
 t1 = time.time()
-lambda_handler_1()
+child_pid = os.fork()
+if child_pid == 0:
+    lambda_handler_1()
+    exit(-1)
+else:
+    output1 = os.popen("perf stat -e branches,branch-misses,L1-dcache-loads,L1-dcache-load-misses -p " + str(pid)).read()
+    print(output1)
 t2 = time.time()
 rt1 = t2 - t1
-
-output1 = os.popen("perf stat -e branches,branch-misses,L1-dcache-loads,L1-dcache-load-misses -p " + str(pid)).read()
-print(output1)
 
 lambda_handler_1()
 lambda_handler_1()
