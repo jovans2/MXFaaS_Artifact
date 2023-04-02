@@ -86,6 +86,14 @@ lblPath = gluon.utils.download('http://data.mxnet.io/models/imagenet/synset.txt'
 with open(lblPath, 'r') as f:
     labels = [l.rstrip() for l in f]
 
+blobName = "img10.jpg"
+blob_client = BlobClient.from_connection_string(connection_string, container_name="artifacteval", blob_name=blobName)
+with open(blobName, "wb") as my_blob:
+    t3 = time.time()
+    download_stream = blob_client.download_blob()
+    t4 = time.time()
+    my_blob.write(download_stream.readall())
+
 def lambda_handler_2():
     blobName = "img10.jpg"
     image = Image.open(blobName)
