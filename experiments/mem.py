@@ -48,7 +48,7 @@ for service in services:
         thread.join()
     
     output = subprocess.check_output("docker kill $(docker ps -q)", shell=True).decode("utf-8")
-    for indF in range(70):
+    for indF in range(20):
         nameS = service + str(indF)
         output = subprocess.check_output("docker rm " + nameS, shell=True).decode("utf-8")
 
