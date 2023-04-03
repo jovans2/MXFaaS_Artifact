@@ -8,6 +8,7 @@ import requests
 total_memory, used_memory, free_memory = map(
     int, os.popen('free -t -m').readlines()[-1].split()[1:])
 usedMemStart = used_memory
+print(usedMemStart)
  
 # Memory usage
 # print("Before our experiments --> RAM memory % used:", round((used_memory) * 100, 2))
@@ -42,7 +43,8 @@ for service in services:
         int, os.popen('free -t -m').readlines()[-1].split()[1:])
 
     # Memory usage
-    print("Baseline --> RAM memory used:", round((used_memory-usedMemStart) * 100, 2))
+    print(used_memory)
+    print("Baseline --> RAM memory used [MB]:", round((used_memory-usedMemStart), 2))
 
     for thread in threads:
         thread.join()
@@ -76,7 +78,8 @@ for service in services:
         int, os.popen('free -t -m').readlines()[-1].split()[1:])
 
     # Memory usage
-    print("MXFaaS --> RAM memory used:", round((used_memory-usedMemStart) * 100, 2))
+    print(used_memory)
+    print("MXFaaS [MB]--> RAM memory used:", round((used_memory-usedMemStart), 2))
 
     for thread in threads:
         thread.join()
