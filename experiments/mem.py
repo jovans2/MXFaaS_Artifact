@@ -8,10 +8,6 @@ import requests
 total_memory, used_memory, free_memory = map(
     int, os.popen('free -t -m').readlines()[-1].split()[1:])
 usedMemStart = used_memory
-print(usedMemStart)
- 
-# Memory usage
-# print("Before our experiments --> RAM memory % used:", round((used_memory) * 100, 2))
 
 def lambda_func(service):
     while True:
@@ -43,7 +39,6 @@ for service in services:
         int, os.popen('free -t -m').readlines()[-1].split()[1:])
 
     # Memory usage
-    print(used_memory)
     print("Baseline --> RAM memory used [MB]:", round((used_memory-usedMemStart), 2))
 
     for thread in threads:
@@ -78,7 +73,6 @@ for service in services:
         int, os.popen('free -t -m').readlines()[-1].split()[1:])
 
     # Memory usage
-    print(used_memory)
     print("MXFaaS [MB]--> RAM memory used:", round((used_memory-usedMemStart), 2))
 
     for thread in threads:
