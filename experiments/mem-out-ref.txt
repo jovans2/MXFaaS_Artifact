@@ -1,0 +1,2 @@
+Baseline --> RAM memory used [MB]: 5845
+MXFaaS [MB]--> RAM memory used: 85
