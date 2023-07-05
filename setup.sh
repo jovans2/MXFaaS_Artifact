@@ -21,11 +21,19 @@ cd /tmp/114514
 curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
 sudo install minikube-linux-amd64 /usr/local/bin/minikube
 
-sudo curl -fsSLo /usr/share/keyrings/kubernetes-archive-keyring.gpg https://packages.cloud.google.com/apt/doc/apt-key.gpg
-echo "deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
 
-sudo apt-get update
-sudo apt-get install -y kubectl
+# This part was commented out because Kubenetes suggest a new way to install kubectl
+# See https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/
+
+#sudo curl -fsSLo /usr/share/keyrings/kubernetes-archive-keyring.gpg https://packages.cloud.google.com/apt/doc/apt-key.gpg
+#echo "deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list
+
+#sudo apt-get update
+#sudo apt-get install -y kubectl
+
+
+curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
 
 wget https://github.com/knative/client/releases/download/knative-v1.8.1/kn-linux-amd64
 chmod +x kn-linux-amd64
@@ -60,5 +68,5 @@ kubectl apply -f https://github.com/knative/serving/releases/download/knative-v1
 
 sudo apt-get install python3-pip -y
 pip3 install docker
-pip3 install numpy==1.19.5
+pip3 install numpy # Sometimes numpy need to specify the version
 pip3 install torch torchvision torchaudio
