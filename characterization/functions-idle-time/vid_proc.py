@@ -38,7 +38,7 @@ def video_processing():
             cv2.imwrite(tmp_file_path, gray_frame)
             gray_frame = cv2.imread(tmp_file_path)
             out.write(gray_frame)
-            break
+            # break
         else:
             break
 
