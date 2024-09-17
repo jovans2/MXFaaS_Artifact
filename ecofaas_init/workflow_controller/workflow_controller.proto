@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+package workflowcontroller;
+
+// The request message containing the list of functions and the SLO.
+message OptimizeRequest {
+  repeated string functions = 1; // List of function names
+  double slo = 2; // Service Level Objective in milliseconds
+}
+
+// Information about each function's optimized settings.
+message FunctionDeadline {
+  string function_name = 1;
+  double frequency = 2; // GHz
+  double exec_time = 3; // milliseconds
+  double energy = 4; // Joules
+  double deadline_fraction = 5; // Fraction of SLO
+}
+
+// The response message containing optimized per-function deadlines.
+message OptimizeResponse {
+  repeated FunctionDeadline deadlines = 1;
+  double total_execution_time = 2; // milliseconds
+  double total_energy = 3; // Joules
+  string message = 4; // Success or error message
+}
+
+// The WorkflowController service definition.
+service WorkflowController {
+  // Optimizes per-function deadlines based on the provided functions and SLO.
+  rpc OptimizeDeadlines (OptimizeRequest) returns (OptimizeResponse);
+}

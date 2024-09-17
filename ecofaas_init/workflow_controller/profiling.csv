@@ -1,0 +1,7 @@
+function_name,frequency,exec_time,energy
+f1,1.0,10,50
+f1,1.5,7,70
+f1,2.0,5,90
+f2,1.0,5,100
+f2,1.5,3,140
+f2,2.0,2,180

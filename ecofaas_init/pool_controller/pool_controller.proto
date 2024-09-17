@@ -1,0 +1,51 @@
+syntax = "proto3";
+
+package pool_controller;
+
+import "google/protobuf/empty.proto";
+
+// Message to represent a function request
+message FunctionRequest {
+    string pid = 1;  // Process ID
+    int32 deadline = 2;  // Deadline for the request
+}
+
+// Message to represent core and frequency update
+message CoreFrequencyUpdate {
+    int32 start_core_id = 1;  // Starting core ID
+    int32 core_count = 2;  // Number of cores to update
+    int32 frequency = 3;  // Frequency in MHz
+}
+
+// Message to represent a request update
+message RequestUpdate {
+    string pid = 1;  // Process ID
+    RequestStatus status = 2;  // New status
+}
+
+// Enum for request status
+enum RequestStatus {
+    UNKNOWN = 0;
+    RUNNING = 1;
+    BLOCKED = 2;
+    WAITING = 3;
+    COMPLETED = 4;
+}
+
+// Message to represent utilization data
+message UtilizationData {
+    int32 served_requests = 1;
+    float avg_waiting_time = 2;
+    int32 missed_requests = 3;
+    int32 temp_freq_increases = 4;
+}
+
+// Service definition
+service PoolController {
+    rpc AddRequest (FunctionRequest) returns (google.protobuf.Empty);
+    rpc BlockRequest (RequestUpdate) returns (google.protobuf.Empty);
+    rpc UnblockRequest (RequestUpdate) returns (google.protobuf.Empty);
+    rpc CompleteRequest (RequestUpdate) returns (google.protobuf.Empty);
+    rpc UpdateCoreFrequency (CoreFrequencyUpdate) returns (google.protobuf.Empty);
+    rpc SendUtilizationData (UtilizationData) returns (google.protobuf.Empty);
+}

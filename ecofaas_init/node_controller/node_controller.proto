@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+package nodecontroller;
+
+// Message containing utilization data from a pool.
+message PoolUtilization {
+  string pool_id = 1;
+  int32 num_served_invocations = 2;
+  double avg_waiting_time = 3; // in milliseconds
+  int32 num_invocations_lower_freq_possible = 4;
+  int32 num_invocations_increased_freq = 5;
+}
+
+// Assignment message for a pool.
+message Assignment {
+  int32 num_cores = 1;
+  int32 frequency_level = 2; // e.g., 1: low, 2: medium, 3: high
+}
+
+// Request message for updating pool utilization.
+message UpdatePoolUtilizationRequest {
+  PoolUtilization utilization = 1;
+}
+
+// Response message for updating pool utilization.
+message UpdatePoolUtilizationResponse {
+  Assignment assignment = 1;
+  string message = 2;
+}
+
+// The NodeController service definition.
+service NodeController {
+  // Pool Controllers call this to send their utilization data and receive assignments.
+  rpc UpdatePoolUtilization (UpdatePoolUtilizationRequest) returns (UpdatePoolUtilizationResponse);
+}

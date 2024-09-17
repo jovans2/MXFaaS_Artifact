@@ -1,0 +1,38 @@
+syntax = "proto3";
+
+package pool_manager;
+import "google/protobuf/empty.proto";
+
+// Define the PoolUtilization message
+message PoolUtilization {
+    string pool_id = 1;
+    int32 num_served_invocations = 2;
+    double avg_waiting_time = 3;
+    int32 num_invocations_lower_freq_possible = 4;
+    int32 num_invocations_increased_freq = 5;
+}
+
+// Define the NodeAssignment message
+message NodeAssignment {
+    string pool_id = 1;
+    int32 num_cores = 2;
+    int32 start_id = 3;
+    int32 frequency_level = 4;  // Adjust according to the frequency levels used
+    string message = 5;
+}
+
+// Request message to update the Node Controller
+message UpdateUtilizationsRequest {
+    repeated PoolUtilization utilizations = 1;
+}
+
+// Response message for the Node Controller update
+message UpdateUtilizationsResponse {
+    repeated NodeAssignment assignments = 1;
+    string message = 2;
+}
+
+// Define the Pool Manager service
+service PoolManager {
+    rpc GetUtilizations (google.protobuf.Empty) returns (UpdateUtilizationsResponse);
+}
